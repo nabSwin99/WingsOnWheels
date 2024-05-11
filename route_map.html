@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_a12111de35bcef203a781266a9a9dce6 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_a12111de35bcef203a781266a9a9dce6" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_a12111de35bcef203a781266a9a9dce6 = L.map(
+                "map_a12111de35bcef203a781266a9a9dce6",
+                {
+                    center: [-37.82306328822841, 145.0363639985686],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 1,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3222f84e5a5a06b3a036074daa0be733 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_3222f84e5a5a06b3a036074daa0be733.addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var poly_line_342be0f1b9c46ab1a93c423bc17c95aa = L.polyline(
+                [[-37.8239855, 145.0345713], [-37.8239829, 145.0347135], [-37.8240445, 145.0350685], [-37.824047, 145.0350873]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var poly_line_dee349271cb4b230b59374a1284bfee9 = L.polyline(
+                [[-37.824047, 145.0350873], [-37.8231234, 145.0352566], [-37.8229297, 145.0352924], [-37.8228041, 145.0353156], [-37.8227752, 145.0353209], [-37.822601, 145.0353531]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var poly_line_5f0ae17681329a42d1b04c50d8a7fd3f = L.polyline(
+                [[-37.822601, 145.0353531], [-37.8226032, 145.0353723], [-37.8226174, 145.0354882], [-37.8226231, 145.0355349], [-37.8226354, 145.0356368], [-37.8226447, 145.0357132], [-37.8227425, 145.036518], [-37.8228085, 145.0370322]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var poly_line_178efc825ade3d1f24178a3237237dab = L.polyline(
+                [[-37.8228085, 145.0370322], [-37.8228883, 145.037717], [-37.8229408, 145.0381368]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var poly_line_f8ddbe84ce888772f796c5b4bc5f9bd0 = L.polyline(
+                [[-37.8229408, 145.0381368], [-37.8229988, 145.0386229], [-37.8230203, 145.0388033]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            map_a12111de35bcef203a781266a9a9dce6.fitBounds(
+                [[-37.824047, 145.0345713], [-37.822601, 145.0388033]],
+                {}
+            );
+        
+    
+            var marker_e3ace9c495e7e1ea0139e10d0882cc1f = L.marker(
+                [-37.8243167, 145.03463355],
+                {}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var beautify_icon_b84306a4ca93b503b1fba09683dd6c83 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "#000", "borderWidth": 3, "icon": "plane", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": false, "spin": false, "textColor": "#000"}
+            )
+            marker_e3ace9c495e7e1ea0139e10d0882cc1f.setIcon(beautify_icon_b84306a4ca93b503b1fba09683dd6c83);
+        
+    
+        var popup_551c4f0e9312a43293188a3d303e893a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_9278009cebbea8ee4c96e4d4584c06b5 = $(`<div id="html_9278009cebbea8ee4c96e4d4584c06b5" style="width: 100.0%; height: 100.0%;">593 Glenferrie Rd, Hawthorn VIC 3122</div>`)[0];
+                popup_551c4f0e9312a43293188a3d303e893a.setContent(html_9278009cebbea8ee4c96e4d4584c06b5);
+            
+        
+
+        marker_e3ace9c495e7e1ea0139e10d0882cc1f.bindPopup(popup_551c4f0e9312a43293188a3d303e893a)
+        ;
+
+        
+    
+    
+            var marker_5b8c2430b90729280c1f178a288bd8e8 = L.marker(
+                [-37.8229436, 145.0388174],
+                {}
+            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
+        
+    
+            var beautify_icon_b184767d93109fbcc0da9611daaf6086 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "red", "borderColor": "#000", "borderWidth": 3, "icon": "flag-checkered", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": false, "spin": false, "textColor": "#000"}
+            )
+            marker_5b8c2430b90729280c1f178a288bd8e8.setIcon(beautify_icon_b184767d93109fbcc0da9611daaf6086);
+        
+    
+        var popup_0a62e4867f683991c04068bec0e51e7c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ed5828ec1a05a3a3e44a0e04f6ad1a1a = $(`<div id="html_ed5828ec1a05a3a3e44a0e04f6ad1a1a" style="width: 100.0%; height: 100.0%;">John St, Hawthorn VIC 3122</div>`)[0];
+                popup_0a62e4867f683991c04068bec0e51e7c.setContent(html_ed5828ec1a05a3a3e44a0e04f6ad1a1a);
+            
+        
+
+        marker_5b8c2430b90729280c1f178a288bd8e8.bindPopup(popup_0a62e4867f683991c04068bec0e51e7c)
+        ;
+
+        
+    
+</script>
+</html>
