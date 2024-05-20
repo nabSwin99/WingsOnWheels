@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #fff;
+    color: #333;
+}
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.logo {
+    width: 100px; /* Adjust according to your logo's aspect ratio */
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+.item-entry {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+.item-image {
+    width: 60px; /* Adjust based on your needs */
+    height: auto;
+    margin-right: 10px;
+}
+.item-details {
+    flex-grow: 1;
+}
+.item-name, .item-price {
+    margin: 0;
+}
+button {
+    padding: 5px 10px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.view-cart {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #007BFF;
+    text-decoration: none;
+}
+.view-cart:hover {
+    text-decoration: underline;
+}
