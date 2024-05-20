@@ -47,6 +47,24 @@
         height: 10;
         width: auto;
     }
+    .restaurants a {
+        text-align: center; /* Centers the content of the link */
+        display: inline-block; /* Makes the link behave like an inline block */
+        margin: 10px; /* Adds some space around each restaurant link */
+        color: black; /* Sets text color */
+        text-decoration: none; /* Removes underline from links */
+    }
+    .restaurants p {
+        margin-top: 2%;
+        display: block; /* Block display to behave like a paragraph */
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+        color: #333; /* Dark text color for readability */
+        padding: 5px 10px; /* Padding around text */
+        border-radius: 4px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+        font-weight: bold; /* Bold font weight */
+        margin-bottom: 10px; /* Space below address */
+    }
     
 </style>
 </head>
@@ -85,16 +103,18 @@
     <!-- User is logged in, link to the order page -->
     <a href="{% url 'order' %}">
         <img src="/static/images/7eleven.png" alt="7-Eleven">
-    </a>
+        <p>593 Glenferrie Rd, Hawthorn VIC 3122</p> 
     {% else %}
     <!-- User is not logged in, link to the login page -->
     <a href="{% url 'signin_home' %}">
         <img src="/static/images/7eleven.png" alt="7-Eleven">
+        <p>593 Glenferrie Rd, Hawthorn VIC 3122</p> 
     </a>
     {% endif %}
-
-    
-
 </div>
+
 </body>
 </html>
+
+<!-- Trigger map generation
+<a href="{% url 'show_map' %}" class="btn btn-primary">Confirm Order</a> -->

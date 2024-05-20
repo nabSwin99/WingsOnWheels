@@ -1,164 +1,262 @@
-<!DOCTYPE html>
-<html>
-<head>
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Delivery Tracking Map</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+        .container-fluid {
+            padding-right: 0;
+            padding-left: 0;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        #map {
+            height: 60vh; /* Reduced height */
+            width: 94%; /* Full width */
+            margin-left: 3%;
+        
+        }
+
+        #cartContainer {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #cartTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #cartTable th, #cartTable td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        #cartTable th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #totalPrice {
+            text-align: right;
+            font-weight: bold;
+        }
+        #info {
+            text-align: center;
+            font-size: larger; /* Increase the font size for better readability */
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff; /* Optional: white background for contrast */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Soft shadow for depth */
+            max-width: 400px; /* Restrict the width for better layout */
+            margin: 20px auto; /* Center align the block */
+        }
+
+        #info p {
+            margin: 10px 0; /* Add some vertical spacing between the lines */
+            color: #333; /* Darker text for better readability */
+            font-weight: bold; /* Optional: bold font for emphasis */
+        }
+    </style>
+
+
+    </head>
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+            Meals on Wings
+        </div>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <h5> Your order with ID:49 is on the way...</h5>
+        </ul>
+
+        <div class="col-md-3 text-end">
+
+        Hello, swin
     
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    
+        </div>
+        </header>
+    </div>
+    <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <div class="container-fluid">
+        <div id="map"></div>
+        <div id="info">
+            <p>Distance Left: <span id="distance-left">Calculating...</span></p>
+            <p>Time Left: <span id="time-left">Calculating...</span></p>
+        </div>
+    </div>
         <script>
-            L_NO_TOUCH = false;
-            L_DISABLE_3D = false;
+            var map = L.map('map').setView([-37.814, 144.96332], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var droneIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/8169/8169618.png',
+                iconSize: [50, 50],
+                iconAnchor: [25, 25]
+            });
+
+            var startIcon = L.icon({
+                iconUrl: '/static/images/store.png',
+                iconSize: [50, 50],
+                iconAnchor: [25, 50]
+            });
+
+            var endIcon = L.icon({
+                iconUrl: '/static/images/destination_marker.png',
+                iconSize: [50, 50],
+                iconAnchor: [25, 50]
+            });
+
+            var startCoords = [-37.8243167, 145.03463355];
+            var endCoords = [-37.7044163, 144.9339563];
+
+            function interpolatePoints(start, end, numberOfPoints) {
+                var points = [start];
+                for (var i = 1; i < numberOfPoints; i++) {
+                    var fraction = i / numberOfPoints;
+                    var lat = start[0] + fraction * (end[0] - start[0]);
+                    var lng = start[1] + fraction * (end[1] - start[1]);
+                    points.push([lat, lng]);
+                }
+                points.push(end);
+                return points;
+            }
+
+            var routePoints = interpolatePoints(startCoords, endCoords, 10);
+            var polyline = L.polyline(routePoints, {color: 'blue'}).addTo(map);
+            map.fitBounds(polyline.getBounds());
+
+            L.marker(startCoords, {icon: startIcon}).addTo(map).bindPopup("Start Point");
+            L.marker(endCoords, {icon: endIcon}).addTo(map).bindPopup("End Point");
+
+            var movingMarker = L.marker(routePoints[0], {icon: droneIcon}).addTo(map);
+            var counter = 0;
+            function moveMarker() {
+                if (counter < routePoints.length) {
+                    movingMarker.setLatLng(new L.LatLng(routePoints[counter][0], routePoints[counter][1]));
+                    map.panTo(new L.LatLng(routePoints[counter][0], routePoints[counter][1]));
+                    var remainingDistance = 0;
+                    for (var j = counter; j < routePoints.length - 1; j++) {
+                        remainingDistance += map.distance(routePoints[j], routePoints[j + 1]);
+                    }
+
+                    document.getElementById('distance-left').textContent = remainingDistance.toFixed(2) + ' meters';
+                    var speed = 50; // meters per minute
+                    var timeLeft = remainingDistance / speed; // minutes
+                    document.getElementById('time-left').textContent = timeLeft.toFixed(2) + ' minutes';
+
+                    counter++;
+                    setTimeout(moveMarker, 2000);
+                } else {
+                    var modal = new bootstrap.Modal(document.getElementById('deliveryCompleteModal'));
+                    modal.show();
+                }
+            }
+
+            function redirectToNext() {
+                window.location.href = 'order_delivered'; // Triggering the order_delivered view to change order status.
+            }
+
+
+
+        moveMarker(); //Executing the drone simulation.
         </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    
-            <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <style>
-                #map_a12111de35bcef203a781266a9a9dce6 {
-                    position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
-                    left: 0.0%;
-                    top: 0.0%;
-                }
-                .leaflet-container { font-size: 1rem; }
-            </style>
-        
-    <script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>
-</head>
-<body>
-    
-    
-            <div class="folium-map" id="map_a12111de35bcef203a781266a9a9dce6" ></div>
-        
-</body>
+
+<div id="cartContainer">
+    <h1>Your Cart</h1>
+    <table id="cartTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JavaScript will dynamically insert rows here -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;">Total Price:</td>
+                <td id="totalPrice"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
 <script>
-    
-    
-            var map_a12111de35bcef203a781266a9a9dce6 = L.map(
-                "map_a12111de35bcef203a781266a9a9dce6",
-                {
-                    center: [-37.82306328822841, 145.0363639985686],
-                    crs: L.CRS.EPSG3857,
-                    zoom: 1,
-                    zoomControl: true,
-                    preferCanvas: false,
-                }
-            );
+document.addEventListener('DOMContentLoaded', function() {
+    // Assuming cart_details is already defined in your script as a global variable
+    var cartItems = {"items": [{"name": "Strawberry Shake", "price": "3.69", "quantity": 1, "total": "3.69"}], "total_price": "3.69"};  // Directly use the variable if it's included as a script in your page
 
-            
+    // Check the structure of cartItems to ensure it's loaded correctly
+    console.log(cartItems);
 
-        
-    
-            var tile_layer_3222f84e5a5a06b3a036074daa0be733 = L.tileLayer(
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            );
-        
-    
-            tile_layer_3222f84e5a5a06b3a036074daa0be733.addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var poly_line_342be0f1b9c46ab1a93c423bc17c95aa = L.polyline(
-                [[-37.8239855, 145.0345713], [-37.8239829, 145.0347135], [-37.8240445, 145.0350685], [-37.824047, 145.0350873]],
-                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var poly_line_dee349271cb4b230b59374a1284bfee9 = L.polyline(
-                [[-37.824047, 145.0350873], [-37.8231234, 145.0352566], [-37.8229297, 145.0352924], [-37.8228041, 145.0353156], [-37.8227752, 145.0353209], [-37.822601, 145.0353531]],
-                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var poly_line_5f0ae17681329a42d1b04c50d8a7fd3f = L.polyline(
-                [[-37.822601, 145.0353531], [-37.8226032, 145.0353723], [-37.8226174, 145.0354882], [-37.8226231, 145.0355349], [-37.8226354, 145.0356368], [-37.8226447, 145.0357132], [-37.8227425, 145.036518], [-37.8228085, 145.0370322]],
-                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var poly_line_178efc825ade3d1f24178a3237237dab = L.polyline(
-                [[-37.8228085, 145.0370322], [-37.8228883, 145.037717], [-37.8229408, 145.0381368]],
-                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var poly_line_f8ddbe84ce888772f796c5b4bc5f9bd0 = L.polyline(
-                [[-37.8229408, 145.0381368], [-37.8229988, 145.0386229], [-37.8230203, 145.0388033]],
-                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            map_a12111de35bcef203a781266a9a9dce6.fitBounds(
-                [[-37.824047, 145.0345713], [-37.822601, 145.0388033]],
-                {}
-            );
-        
-    
-            var marker_e3ace9c495e7e1ea0139e10d0882cc1f = L.marker(
-                [-37.8243167, 145.03463355],
-                {}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var beautify_icon_b84306a4ca93b503b1fba09683dd6c83 = new L.BeautifyIcon.icon(
-                {"backgroundColor": "green", "borderColor": "#000", "borderWidth": 3, "icon": "plane", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": false, "spin": false, "textColor": "#000"}
-            )
-            marker_e3ace9c495e7e1ea0139e10d0882cc1f.setIcon(beautify_icon_b84306a4ca93b503b1fba09683dd6c83);
-        
-    
-        var popup_551c4f0e9312a43293188a3d303e893a = L.popup({"maxWidth": "100%"});
+    if (cartItems && Array.isArray(cartItems.items)) {
+        var tableBody = document.getElementById('cartTable').getElementsByTagName('tbody')[0];
+        var totalPrice = 0;  // Initialize total price
 
-        
-            
-                var html_9278009cebbea8ee4c96e4d4584c06b5 = $(`<div id="html_9278009cebbea8ee4c96e4d4584c06b5" style="width: 100.0%; height: 100.0%;">593 Glenferrie Rd, Hawthorn VIC 3122</div>`)[0];
-                popup_551c4f0e9312a43293188a3d303e893a.setContent(html_9278009cebbea8ee4c96e4d4584c06b5);
-            
-        
+        cartItems.items.forEach(function(item) {
+            var row = tableBody.insertRow();
+            row.insertCell(0).innerHTML = item.name;
+            row.insertCell(1).innerHTML = '$' + parseFloat(item.price).toFixed(2);
+            row.insertCell(2).innerHTML = item.quantity;
+            row.insertCell(3).innerHTML = '$' + parseFloat(item.total).toFixed(2);
+            totalPrice += parseFloat(item.total);  // Calculate total price from item totals
+        });
 
-        marker_e3ace9c495e7e1ea0139e10d0882cc1f.bindPopup(popup_551c4f0e9312a43293188a3d303e893a)
-        ;
-
-        
-    
-    
-            var marker_5b8c2430b90729280c1f178a288bd8e8 = L.marker(
-                [-37.8229436, 145.0388174],
-                {}
-            ).addTo(map_a12111de35bcef203a781266a9a9dce6);
-        
-    
-            var beautify_icon_b184767d93109fbcc0da9611daaf6086 = new L.BeautifyIcon.icon(
-                {"backgroundColor": "red", "borderColor": "#000", "borderWidth": 3, "icon": "flag-checkered", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": false, "spin": false, "textColor": "#000"}
-            )
-            marker_5b8c2430b90729280c1f178a288bd8e8.setIcon(beautify_icon_b184767d93109fbcc0da9611daaf6086);
-        
-    
-        var popup_0a62e4867f683991c04068bec0e51e7c = L.popup({"maxWidth": "100%"});
-
-        
-            
-                var html_ed5828ec1a05a3a3e44a0e04f6ad1a1a = $(`<div id="html_ed5828ec1a05a3a3e44a0e04f6ad1a1a" style="width: 100.0%; height: 100.0%;">John St, Hawthorn VIC 3122</div>`)[0];
-                popup_0a62e4867f683991c04068bec0e51e7c.setContent(html_ed5828ec1a05a3a3e44a0e04f6ad1a1a);
-            
-        
-
-        marker_5b8c2430b90729280c1f178a288bd8e8.bindPopup(popup_0a62e4867f683991c04068bec0e51e7c)
-        ;
-
-        
-    
+        document.getElementById('totalPrice').innerHTML = '$' + totalPrice.toFixed(2);
+    } else {
+        console.error('Items is not an array or cartItems is undefined');
+    }
+});
 </script>
-</html>
+
+    <!-- Delivery Complete Modal -->
+    <div class="modal fade" id="deliveryCompleteModal" tabindex="-1" aria-labelledby="deliveryCompleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deliveryCompleteModalLabel">Delivery Complete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="redirectToNext()"></button>
+
+        </div>
+        <div class="modal-body">
+            Your order has been delivered successfully!
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="redirectToNext()">OK</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+    </body>
+    </html>
+
+    
