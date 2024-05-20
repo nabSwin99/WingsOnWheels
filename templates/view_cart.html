@@ -1,0 +1,131 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<head>
+
+    <title>View Cart</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            color: green;
+            border-bottom: 3px solid green;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        li {
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .cart-controls {
+            display: flex;
+            align-items: center;
+        }
+        button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .total {
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+  
+        .remove_btn{
+            margin-right: 10px;
+        }
+        .add_btn{
+            margin-left: 10px;
+        }
+        .continue-shopping {
+            display: inline-block; /* Makes the link behave like a button */
+            padding: 5.5px 13px; /* Padding to increase the size and make it look button-like */
+            background-color: #72A0C1; /* Background color */
+            color: white; /* Text color */
+            text-align: center; /* Centers the text inside the link */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* Removes underline from the link */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+            margin-right: 30px;
+        }
+        
+        .continue-shopping:hover {
+            background-color: lightseagreen; /* Change color on hover */
+            text-decoration: none; /* Ensures no underline appears on hover */
+        }
+        
+    </style>
+</head>
+
+    <h1>Your Cart</h1>
+    <ul>
+        {% for item, quantity in cart_items %}
+        <li>
+            <div>
+                {{ item.name }} - ${{ item.price }} each
+            </div>
+            <div class="cart-controls">
+                <button class="remove_btn" onclick="updateCartItem('{{ item.id }}', 'remove')">-</button>
+                <span>{{ quantity }}</span>
+                <button class="add_btn" onclick="updateCartItem('{{ item.id }}', 'add')">+</button>
+            </div>
+        </li>
+        {% empty %}
+        <li>Your cart is empty.</li>
+        {% endfor %}
+    </ul>
+    <div class="total">Total Price: ${{ total_price }}</div>
+    <form action="{% url 'confirm_order' %}" method="post">
+        {% csrf_token %}
+        <a href="{% url 'order' %}" class="continue-shopping">Continue Shopping</a>
+        <button type="submit" class="btn btn-success">Confirm Order</button>
+        
+    </form>
+    
+
+
+    <script>
+        function updateCartItem(itemId, action) {
+            const url = `{% url 'update_cart' 999 'add' %}`.replace('999/add', itemId + '/' + action);
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload the page to update the cart display
+                } else {
+                    alert("There was a problem updating the cart.");
+                }
+            })
+            .catch(error => console.error('Error updating cart:', error));
+        }
+    </script>
+
+{% endblock %}
