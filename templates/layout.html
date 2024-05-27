@@ -10,29 +10,43 @@
 
 
 
-<div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-      <div class="col-md-3 mb-2 mb-md-0">
-        Meals on Wings
+<!-- Navigation Bar Settings. -->
+<nav class="navbar navbar-expand-md">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="/">Meals on Wings</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/faq">FAQs</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/about">About</a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link" href="/order_history/">Order History</a>
+              </li>
+              {% endif %}
+          </ul>
+          <div class="d-flex">
+              {% if user.is_authenticated %}
+              <span class="navbar-text me-3">Hello, {{ user.first_name }}</span>
+              <a href="/accounts/logout" class="btn btn-outline-primary me-2">Log Out</a>
+              {% else %}
+              <a href="/accounts/login" class="btn btn-outline-primary me-2">Login</a>
+              <a href="/accounts/register" class="btn btn-primary">Sign-up</a>
+              {% endif %}
+          </div>
       </div>
-
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <a href="/" class="nav-link px-2 link-secondary">Home</a>
-        <a href="#" class="nav-link px-2">FAQs</a>
-        <a href="#" class="nav-link px-2">About</a>
-      </ul>
-
-      <div class="col-md-3 text-end">
-        {% if user.is_authenticated %}
-        Hello, {{user.first_name}}
-        <a style="margin-left: 30px;" href="accounts/logout" class="btn btn-outline-primary me-2">Log Out</a>
-        {% else %}
-        <a href="accounts/login" type="button" class="btn btn-outline-primary me-2">Login  </a>
-        <a href="accounts/register" class="btn btn-primary">Sign-up</a> 
-        {% endif %}
-      </div>
-    </header>
   </div>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   
 <body bgcolor="blue">

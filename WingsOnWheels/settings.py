@@ -116,7 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Australia/Melbourne'  # Setting to local timezone
+
 
 USE_I18N = True
 

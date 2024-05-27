@@ -72,6 +72,21 @@
             font-weight: bold; /* Optional: bold font for emphasis */
         }
     </style>
+    <script>
+        // Prevent back button
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+
+        // Clear session history
+        window.onload = function() {
+            if (typeof history.pushState === "function") {
+                history.pushState("forward", null, document.title);
+                window.history.forward(1);
+            }
+        };
+    </script>
 
 
     </head>
@@ -82,12 +97,12 @@
         </div>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <h5> Your order with ID:49 is on the way...</h5>
+        <h5> Your order with ID:67 is on the way...</h5>
         </ul>
 
         <div class="col-md-3 text-end">
 
-        Hello, swin
+        Hello, Nabeel
     
         </div>
         </header>
@@ -128,7 +143,7 @@
             });
 
             var startCoords = [-37.8243167, 145.03463355];
-            var endCoords = [-37.7044163, 144.9339563];
+            var endCoords = [-37.809769599999996, 144.96553516995195];
 
             function interpolatePoints(start, end, numberOfPoints) {
                 var points = [start];
@@ -168,7 +183,11 @@
                     counter++;
                     setTimeout(moveMarker, 2000);
                 } else {
-                    var modal = new bootstrap.Modal(document.getElementById('deliveryCompleteModal'));
+                    var modal = new bootstrap.Modal(document.getElementById('deliveryCompleteModal'), {
+                    backdrop: 'static', // Prevent closing by clicking outside
+                    keyboard: false // Prevent closing with ESC key
+                    });
+
                     modal.show();
                 }
             }
@@ -208,7 +227,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Assuming cart_details is already defined in your script as a global variable
-    var cartItems = {"items": [{"name": "Strawberry Shake", "price": "3.69", "quantity": 1, "total": "3.69"}], "total_price": "3.69"};  // Directly use the variable if it's included as a script in your page
+    var cartItems = {"items": [{"name": "Cinnamon Bites 6 Pack", "price": "4.00", "quantity": 1, "total": "4.00"}], "total_price": "4.00"};  // Directly use the variable if it's included as a script in your page
 
     // Check the structure of cartItems to ensure it's loaded correctly
     console.log(cartItems);

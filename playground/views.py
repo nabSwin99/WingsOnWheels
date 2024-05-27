@@ -139,10 +139,35 @@ def confirm_order(request):
             OrderItem.objects.create(order=order, item=item, quantity=quantity)
 
         # Clear the cart
-        #request.session['cart'] = {}
         request.session['order_id'] = order.id  # Save order ID in session for use in the next view
 
         return redirect('show-map/')  # Redirect to a new URL for order success page
 
     return render(request, 'view_cart.html')  # Show the cart if not a POST request
 
+
+## Functions for showing about and FAQ pages.
+def about(request):
+    return render(request, 'about.html')
+
+def faq(request):
+    return render(request, 'faq.html')
+
+from django.contrib.auth.decorators import login_required
+from .models import Order
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(customer=request.user).prefetch_related('orderitem_set__item')
+    orders_with_totals = []
+    for order in orders:
+        total = sum(orderitem.item.price * orderitem.quantity for orderitem in order.orderitem_set.all())
+        orders_with_totals.append({
+            'order': order,
+            'total': total
+        })
+    
+    context = {
+        'orders_with_totals': orders_with_totals,
+    }
+    return render(request, 'order_history.html', context)

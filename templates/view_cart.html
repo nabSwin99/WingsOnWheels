@@ -2,42 +2,50 @@
 {% block content %}
 
 <head>
-
     <title>View Cart</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            padding: 20px;
+            padding: 0;
             margin: 0;
         }
+
         h1 {
             color: green;
             border-bottom: 3px solid green;
             padding-bottom: 10px;
+            text-align: center;
         }
+
         ul {
             list-style-type: none;
             padding: 0;
             margin: 0 auto;
             max-width: 600px;
         }
-        li {
-            background-color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+
+
+        img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 20px;
         }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+        }
+
         .cart-controls {
             display: flex;
             align-items: center;
+            margin-top: 10px;
         }
-        button {
+
+        .cart-controls button {
             background-color: green;
             color: white;
             border: none;
@@ -45,87 +53,243 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        button:hover {
+
+        .cart-controls button:hover {
             background-color: #0056b3;
         }
+
+        .cart-controls span {
+            margin: 0 10px;
+        }
+
         .total {
             font-size: 20px;
             margin-top: 20px;
             text-align: center;
         }
+
         form {
             text-align: center;
             margin-top: 20px;
         }
-  
-        .remove_btn{
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type='text'],
+        select {
+            width: 60%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .payment-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .continue-shopping,
+        .btn-confirm-order {
+            padding: 10px 20px;
             margin-right: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
         }
-        .add_btn{
-            margin-left: 10px;
-        }
+
         .continue-shopping {
-            display: inline-block; /* Makes the link behave like a button */
-            padding: 5.5px 13px; /* Padding to increase the size and make it look button-like */
-            background-color: #72A0C1; /* Background color */
-            color: white; /* Text color */
-            text-align: center; /* Centers the text inside the link */
-            border-radius: 5px; /* Rounded corners */
-            text-decoration: none; /* Removes underline from the link */
-            transition: background-color 0.3s; /* Smooth transition for hover effect */
-            margin-right: 30px;
+            background-color: #72A0C1;
         }
-        
+
         .continue-shopping:hover {
-            background-color: lightseagreen; /* Change color on hover */
-            text-decoration: none; /* Ensures no underline appears on hover */
+            background-color: #5487a7;
         }
-        
+
+        .btn-confirm-order {
+            background-color: green;
+        }
+
+        .btn-confirm-order:hover {
+            background-color: #0056b3;
+        }
+        .item{
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+        .navbar {
+            background-color: #343a40; /* Dark background */
+            margin-top: 0%;
+            margin-bottom: 3%;
+          }
+          .navbar-brand {
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: white;
+              margin-left: 1%;
+              margin-right: 0%;
+          }
+          .nav-link {
+              font-size: 1.1rem;
+              color: white;
+              margin-right: 30px;
+              margin-left: 0%;
+          }
+          .nav-link:hover {
+              color: #ddd;
+          }
+          .navbar-text {
+              color: white;
+          }
+          .btn-outline-primary {
+              color: white;
+              border-color: white;
+          }
+          .btn-outline-primary:hover {
+              color: #007bff;
+              background-color: white;
+              border-color: white;
+          }
+          .btn-primary {
+              background-color: #007bff;
+              color: white;
+              border-color: #007bff;
+          }
+          .btn-primary:hover {
+              background-color: #0056b3;
+              border-color: #0056b3;
+          }
+          .empty-cart-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
+
+<body>
     <h1>Your Cart</h1>
     <ul>
         {% for item, quantity in cart_items %}
-        <li>
-            <div>
-                {{ item.name }} - ${{ item.price }} each
-            </div>
-            <div class="cart-controls">
-                <button class="remove_btn" onclick="updateCartItem('{{ item.id }}', 'remove')">-</button>
-                <span>{{ quantity }}</span>
-                <button class="add_btn" onclick="updateCartItem('{{ item.id }}', 'add')">+</button>
+        <li class="item">
+            <div class="cart-item">
+                <img src="{{ item.pic_url }}" alt="{{ item.name }}">
+                <div>
+                    <strong>{{ item.name }}</strong> - ${{ item.price }} each
+                    <div class="cart-controls">
+                        <button class="remove_btn" onclick="updateCartItem('{{ item.id }}', 'remove')">-</button>
+                        <span>{{ quantity }}</span>
+                        <button class="add_btn" onclick="updateCartItem('{{ item.id }}', 'add')">+</button>
+                    </div>
+                </div>
             </div>
         </li>
         {% empty %}
-        <li>Your cart is empty.</li>
+        <div class="empty-cart-message">
+        Your cart is empty.
+        </div>
         {% endfor %}
     </ul>
     <div class="total">Total Price: ${{ total_price }}</div>
-    <form action="{% url 'confirm_order' %}" method="post">
-        {% csrf_token %}
-        <a href="{% url 'order' %}" class="continue-shopping">Continue Shopping</a>
-        <button type="submit" class="btn btn-success">Confirm Order</button>
-        
-    </form>
-    
 
+    <form action="{% url 'confirm_order' %}" method="post" class="payment-form">
+        {% csrf_token %}
+        <label for="payment_method">Payment Method:</label>
+        <select id="payment_method" name="payment_method" required>
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bank_transfer">Bank Transfer</option>
+        </select>
+
+        <label for="card_number">Card Number:</label>
+        <input type="text" id="card_number" name="card_number" pattern="\d{4}-\d{4}-\d{4}-\d{4}" maxlength="19" placeholder="Enter your 16-digit card number" required oninput="formatCardNumber()">
+
+        <label for="expiry_date">Expiry Date:</label>
+        <input type="text" id="expiry_date" name="expiry_date" pattern="\d{2}/\d{2}" maxlength="5" placeholder="MM/YY" required oninput="formatExpiryDate()">
+
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" pattern="\d{3,4}" maxlength="4" placeholder="Enter your CVV" required>
+
+        <div class="payment-buttons">
+            <a href="{% url 'order' %}" class="continue-shopping">Continue Shopping</a>
+            <button type="submit" class="btn-confirm-order">Confirm Order</button>
+        </div>
+    </form>
 
     <script>
         function updateCartItem(itemId, action) {
             const url = `{% url 'update_cart' 999 'add' %}`.replace('999/add', itemId + '/' + action);
 
             fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page to update the cart display
-                } else {
-                    alert("There was a problem updating the cart.");
-                }
-            })
-            .catch(error => console.error('Error updating cart:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Reload the page to update the cart display
+                    } else {
+                        alert("There was a problem updating the cart.");
+                    }
+                })
+                .catch(error => console.error('Error updating cart:', error));
+        }
+
+        function formatCardNumber() {
+            var cardNumber = document.getElementById("card_number").value;
+
+            // Remove all non-digit characters from the card number
+            var cleanCardNumber = cardNumber.replace(/\D/g, '');
+
+            // Limit the length of the card number to 16 digits
+            cleanCardNumber = cleanCardNumber.slice(0, 16);
+
+            // Format the card number with hyphens every four digits
+            var formattedCardNumber = cleanCardNumber.replace(/(\d{4})(?=\d)/g, '$1-');
+
+            // Update the input field value with the formatted card number
+            document.getElementById("card_number").value = formattedCardNumber;
+        }
+
+        function formatExpiryDate() {
+            var expiryDate = document.getElementById("expiry_date").value;
+
+            // Remove all non-digit characters from the expiry date
+            var cleanExpiryDate = expiryDate.replace(/\D/g, '');
+
+            // Limit the length of the expiry date to 4 digits
+            cleanExpiryDate = cleanExpiryDate.slice(0, 4);
+
+            // Format the expiry date with a slash after the first two digits
+            var formattedExpiryDate = cleanExpiryDate.replace(/^(\d{2})(\d{2})$/, '$1/$2');
+
+            // Update the input field value with the formatted expiry date
+            document.getElementById("expiry_date").value = formattedExpiryDate;
         }
     </script>
-
+</body>
 {% endblock %}

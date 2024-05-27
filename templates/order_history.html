@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 0;
+            margin: 0;
+        }
+        h1 {
+            color: green;
+            border-bottom: 3px solid green;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .order {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .order-header {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .order-items {
+            list-style-type: none;
+            padding: 0;
+        }
+        .order-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .order-item img {
+            max-width: 50px;
+            margin-right: 10px;
+        }
+        .order-item .item-details {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .order-item .item-name {
+            font-weight: bold;
+        }
+        .order-item .item-price {
+            color: #333;
+        }
+        .order-total {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+        }
+        .delivery-status {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .status-delivered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-canceled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .navbar {
+            background-color: #343a40; /* Dark background */
+            margin: 0%;
+            margin-bottom: 3%;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-left: 1%;
+            margin-right: 0%;
+        }
+        .nav-link {
+            font-size: 1.1rem;
+            color: white;
+            margin-right: 30px;
+        }
+        .nav-link:hover {
+            color: #ddd;
+        }
+        .navbar-text {
+            color: white;
+        }
+        .btn-outline-primary {
+            color: white;
+            border-color: white;
+        }
+        .btn-outline-primary:hover {
+            color: #007bff;
+            background-color: white;
+            border-color: white;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<!-- Navigation Bar Settings. -->
+<nav class="navbar navbar-expand-md">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Meals on Wings</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">FAQs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/order_history/">Order History</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="d-flex">
+                {% if user.is_authenticated %}
+                <span class="navbar-text me-3">Hello, {{ user.first_name }}</span>
+                <a href="/accounts/logout" class="btn btn-outline-primary me-2">Log Out</a>
+                {% else %}
+                <a href="/accounts/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/accounts/register" class="btn btn-primary">Sign-up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+    <div class="container">
+  
+        <h1>Your Order History</h1>
+        {% if orders_with_totals %}
+            {% for entry in orders_with_totals %}
+            <div class="order">
+                <div class="order-header">Order #{{ entry.order.id }} - {{ entry.order.created_at }}</div>
+                <ul class="order-items">
+                    {% for orderitem in entry.order.orderitem_set.all %}
+                    <li class="order-item">
+                        <img src="{{ orderitem.item.pic_url }}" alt="{{ orderitem.item.name }}">
+                        <div class="item-details">
+                            <div class="item-name">{{ orderitem.item.name }}</div>
+                            <div class="item-price">${{ orderitem.item.price }}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="order-total">
+                    Total: ${{ entry.total }}
+                </div>
+                <div class="delivery-status {% if entry.order.delivery_status == 'Delivered' %}status-delivered{% elif entry.order.delivery_status == 'Pending' %}status-pending{% elif entry.order.delivery_status == 'Canceled' %}status-canceled{% endif %}">
+                    Delivery Status: {{ entry.order.delivery_status }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>You have no orders.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

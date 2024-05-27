@@ -14,4 +14,7 @@ path('view_cart', view_cart, name='view_cart'),
 path('update-cart/<int:item_id>/<str:action>/', update_cart, name='update_cart'),
 path('confirm-order', views.confirm_order, name='confirm_order'),
 path('show-map/order_delivered', views.order_delivered, name='order_delivered'),
+path('about', views.about, name='about'),
+path('faq', views.faq, name='faq'),
+ path('order_history/', views.order_history, name='order_history'),
 ]

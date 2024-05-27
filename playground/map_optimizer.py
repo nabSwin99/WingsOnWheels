@@ -5,7 +5,8 @@ from geopy.geocoders import Nominatim
 from folium.plugins import BeautifyIcon
 from django.shortcuts import render
 from django.http import HttpResponse
-import json
+from geopy.exc import GeocoderServiceError
+
 
 
 def generate_route_map(request1):
@@ -26,6 +27,18 @@ def generate_route_map(request1):
     else:
         # User is not logged in
         return render(request1, 'login.html')
+    
+    # Validate end address
+    try:
+        start_point = locator.geocode(start_location)
+        end_point = locator.geocode(end_location)
+
+        if not end_point:
+            return HttpResponse("Invalid end address", status=400)
+        
+    except GeocoderServiceError as e:
+        return HttpResponse(f"Geocoding service error: {e}", status=500)
+    
     
     # Geocode addresses to get latitude and longitude
     start_point = locator.geocode(start_location).point
@@ -77,7 +90,6 @@ def generate_route_map(request1):
 
             
 
-from geopy.geocoders import Nominatim
 
 def create_map_html(request2, filename, start_location, end_location, order, cart_details):
     locator = Nominatim(user_agent="myapp")
@@ -174,6 +186,21 @@ def create_map_html(request2, filename, start_location, end_location, order, car
             font-weight: bold; /* Optional: bold font for emphasis */
         }}
     </style>
+    <script>
+        // Prevent back button
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {{
+            history.go(1);
+        }};
+
+        // Clear session history
+        window.onload = function() {{
+            if (typeof history.pushState === "function") {{
+                history.pushState("forward", null, document.title);
+                window.history.forward(1);
+            }}
+        }};
+    </script>
 
 
     </head>
@@ -270,7 +297,11 @@ def create_map_html(request2, filename, start_location, end_location, order, car
                     counter++;
                     setTimeout(moveMarker, 2000);
                 }} else {{
-                    var modal = new bootstrap.Modal(document.getElementById('deliveryCompleteModal'));
+                    var modal = new bootstrap.Modal(document.getElementById('deliveryCompleteModal'), {{
+                    backdrop: 'static', // Prevent closing by clicking outside
+                    keyboard: false // Prevent closing with ESC key
+                    }});
+
                     modal.show();
                 }}
             }}

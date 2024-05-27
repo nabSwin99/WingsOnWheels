@@ -12,10 +12,14 @@
         font-family: Arial, sans-serif;
     }
     .header {
-        background: url('/static/images/drone_bg.png') no-repeat center center;
+        
         background-size: cover;
-        height: 300px;
+        height: 510px;
         position: relative;
+        background-image: url('/static/images/bg1.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
     .search-box {
         position: absolute;
@@ -65,32 +69,86 @@
         font-weight: bold; /* Bold font weight */
         margin-bottom: 10px; /* Space below address */
     }
+    .navbar {
+        background-color: #343a40; /* Dark background */
+      }
+      .navbar-brand {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: white;
+          margin-left: 1%;
+          margin-right: 0%;
+      }
+      .nav-link {
+          font-size: 1.1rem;
+          color: white;
+          margin-right: 30px;
+          margin-left: 0%;
+      }
+      .nav-link:hover {
+          color: #ddd;
+      }
+      .navbar-text {
+          color: white;
+      }
+      .btn-outline-primary {
+          color: white;
+          border-color: white;
+      }
+      .btn-outline-primary:hover {
+          color: #007bff;
+          background-color: white;
+          border-color: white;
+      }
+      .btn-primary {
+          background-color: #007bff;
+          color: white;
+          border-color: #007bff;
+      }
+      .btn-primary:hover {
+          background-color: #0056b3;
+          border-color: #0056b3;
+      }
     
 </style>
 </head>
-<div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-      <div class="col-md-3 mb-2 mb-md-0">
-        Meals on Wings
-      </div>
-
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2">FAQs</a></li>
-        <li><a href="#" class="nav-link px-2">About</a></li>
-      </ul>
-
-      <div class="col-md-3 text-end">
-        {% if user.is_authenticated %}
-        Hello, {{user.first_name}}
-        <a style="margin-left: 30px;" href="accounts/logout" class="btn btn-outline-primary me-2">Log Out</a>
-        {% else %}
-        <a href="accounts/login" type="button" class="btn btn-outline-primary me-2">Login  </a>
-        <a href="accounts/register" class="btn btn-primary">Sign-up</a> 
-        {% endif %}
-      </div>
-    </header>
-  </div>
+<!-- Navigation Bar Settings. -->
+<nav class="navbar navbar-expand-md">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Meals on Wings</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">FAQs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/order_history/">Order History</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="d-flex">
+                {% if user.is_authenticated %}
+                <span class="navbar-text me-3">Hello, {{ user.first_name }}</span>
+                <a href="/accounts/logout" class="btn btn-outline-primary me-2">Log Out</a>
+                {% else %}
+                <a href="/accounts/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/accounts/register" class="btn btn-primary">Sign-up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <body>
 <div class="header">
     <div class="search-box">
@@ -98,6 +156,7 @@
         <button>🔍</button>
     </div>
 </div>
+
 <div class="restaurants">
     {% if user.is_authenticated %}
     <!-- User is logged in, link to the order page -->
@@ -106,7 +165,7 @@
         <p>593 Glenferrie Rd, Hawthorn VIC 3122</p> 
     {% else %}
     <!-- User is not logged in, link to the login page -->
-    <a href="{% url 'signin_home' %}">
+    <a href="{% url 'login' %}">
         <img src="/static/images/7eleven.png" alt="7-Eleven">
         <p>593 Glenferrie Rd, Hawthorn VIC 3122</p> 
     </a>
@@ -116,5 +175,3 @@
 </body>
 </html>
 
-<!-- Trigger map generation
-<a href="{% url 'show_map' %}" class="btn btn-primary">Confirm Order</a> -->
