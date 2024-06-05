@@ -9,25 +9,6 @@ from geopy.exc import GeocoderServiceError
 
 # Create your views here.
 
-def signin_home(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            return redirect("/order")
-        else:
-            messages.error(request, "Invalid Credentials!")
-            return redirect("login")
-    else:
-        return render(request, 'signin_home.html')
-
-def logout(request):
-    auth.logout(request)
-    return redirect('/')
-
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -43,7 +24,9 @@ def login(request):
     else:
         return render(request, 'login.html')
 
-
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
 
 def register(request):
     if request.method == 'POST':
@@ -59,11 +42,9 @@ def register(request):
         suburb = request.POST['suburb']
         street_address = request.POST['street_address']
 
-
         state_mappings = {
             'VIC': [3, 8],
         }
-        
         # Extract the first digit of the postcode
         postcode_first_digit = int(postcode[0])
         if postcode_first_digit in state_mappings[state]:
@@ -104,14 +85,10 @@ def register(request):
                     customer.save()
                     messages.success(request, "Registration successful")
                     return redirect('login')
-                
-        
         
         else:
             messages.info(request, "Password Not Matching!")
             return redirect('register')
-
-
     else:
         return render(request, 'register.html')
 
