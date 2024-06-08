@@ -38,13 +38,11 @@ def generate_route_map(request1):
         
     except GeocoderServiceError as e:
         return HttpResponse(f"Geocoding service error: {e}", status=500)
-    
-    
+
     # Geocode addresses to get latitude and longitude
     start_point = locator.geocode(start_location).point
     end_point = locator.geocode(end_location).point
-    print("hello")
-    print(end_point)
+
 
     # Extract latitude and longitude from geopy Point
     start_latlng = (start_point.latitude, start_point.longitude)
@@ -65,9 +63,7 @@ def generate_route_map(request1):
 
             # Compute the shortest path
             shortest_route = nx.shortest_path(graph, orig_node, dest_node, weight=optimizer)
-            route_points = [(graph.nodes[node]['y'], graph.nodes[node]['x']) for node in shortest_route]
 
-    
             # Create a map to display the route
             route_map = ox.plot_route_folium(graph, shortest_route, tiles='openstreetmap')
 
@@ -76,7 +72,6 @@ def generate_route_map(request1):
          route_map = folium.Map(location=start_latlng, zoom_start=15, tiles='openstreetmap')
          # Draw a line between start and end locations
          folium.PolyLine([start_latlng, end_latlng], color="blue", weight=5, opacity=0.7).add_to(route_map)
-
 
     # Add markers for the start and end locations
     icon_start = BeautifyIcon(icon='plane', background_color='green', icon_shape='circle')
@@ -95,11 +90,7 @@ def create_map_html(request2, filename, start_location, end_location, order, car
     locator = Nominatim(user_agent="myapp")
     customer_name = request2.user.first_name
     order_id = order.id
-
     cart_details = cart_details
- 
-
-
 
     start_point = locator.geocode(start_location)
     end_point = locator.geocode(end_location)
@@ -216,7 +207,7 @@ def create_map_html(request2, filename, start_location, end_location, order, car
 
         <div class="col-md-3 text-end">
 
-        Hello, {customer_name}
+        Thank you for ordering with us, {customer_name}
     
         </div>
         </header>
@@ -384,10 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {{
         </div>
     </div>
     </div>
-
-
-
-
 
     </body>
     </html>

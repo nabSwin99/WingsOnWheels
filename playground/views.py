@@ -41,11 +41,9 @@ def signin_home(request):
 
 
 def generate_and_display_map(request):
-
     # Generate the map
     route_map = generate_route_map(request)
-    # # Save the map to a file (could also serve directly from memory)
-    ##filename = save_map(route_map)
+
     filename = 'route_map.html'
     start_location = "593 Glenferrie Rd, Hawthorn VIC 3122"
     end_location = request.user.customer.address
@@ -69,7 +67,7 @@ def generate_and_display_map(request):
                 })
         cart_details = {
             'items': items,
-            'total_price': str(total_price)  # Convert Decimal to string
+            'total_price': str(total_price)  
             }       
         cart_details_json = json.dumps(cart_details)
                     
@@ -79,8 +77,6 @@ def generate_and_display_map(request):
     else:
         # Handle cases where there is no order ID found, maybe redirect or show error
         return render(request, 'view_cart.html') # Redirect back to cart
-
-
 
     # Clear the cart
     request.session['cart'] = {}
@@ -99,8 +95,6 @@ def order_delivered(request):
 
 
     
-
-
 def view_cart(request):
     cart = request.session.get('cart', {})
     items = MenuItem.objects.filter(id__in=cart.keys())
@@ -138,7 +132,7 @@ def confirm_order(request):
             item = MenuItem.objects.get(id=item_id)
             OrderItem.objects.create(order=order, item=item, quantity=quantity)
 
-        # Clear the cart
+        
         request.session['order_id'] = order.id  # Save order ID in session for use in the next view
 
         return redirect('show-map/')  # Redirect to a new URL for order success page
