@@ -15,7 +15,7 @@
 
 7. 	Open Visual Studio to view source code.
 
-*Note: All the libraries and dependencies will be pulled along with the code source, so you may not need to install them seperately. Below are instrustions just in case if the dependencies didn't work properly.
+#### *Note: All the libraries and dependencies will be pulled along with the code source, so you may not need to install them seperately. Below are instrustions just in case if the dependencies didn't work properly.
 
 Dependencies Installing Instructions:
 1. Create a "requirements.txt" file and include all the below text for dependencies:
@@ -65,7 +65,7 @@ Dependencies Installing Instructions:
  	
 ## Step 3: How to add food items to database.
 
-*Note: The database won't have any records or data regarding store items so it needs to be manually added using pgAdmin.
+#### *Note: The database won't have any records or data regarding store items so it needs to be manually added using pgAdmin.
 
 1. Open pgAdmin and navigate to WingsOnWheels > Schemas > Tables > playground_menuitem. Right-click on playground_menuitem and select "View/Edit Data" -> "All Rows" as shown in figure 5.
 
