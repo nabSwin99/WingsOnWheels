@@ -17,7 +17,7 @@
 
 *Note: All the libraries and dependencies will be pulled along with the code source, so you may not need to install them seperately. Below are instrustions just in case if the dependencies didn't work properly.
 
-Dependencies Instructions:
+Dependencies Installing Instructions:
 1. create a "requirements.txt" file and include all the below text for dependencies:
 
 	Django>=3.2,<4.0
