@@ -48,7 +48,7 @@
  	
 ## Step 3: How to add food items to database.
 
-*Note: The database wont have any records or data regarding store items so it needs to be manually added using pgAdmin.
+*Note: The database won't have any records or data regarding store items so it needs to be manually added using pgAdmin.
 
 1. Open pgAdmin and navigate to WingsOnWheels > Schemas > Tables > playground_menuitem. Right-click on playground_menuitem and select "View/Edit Data" -> "All Rows" as shown in figure 5.
 
