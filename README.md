@@ -15,7 +15,24 @@
 
 7. 	Open Visual Studio to view source code.
 
-*Note: All the libraries and dependencies will be pulled along with the code source, so you may not need to install them seperately.
+*Note: All the libraries and dependencies will be pulled along with the code source, so you may not need to install them seperately. Below are instrustions just in case if the dependencies didn't work properly.
+
+Dependencies Instructions:
+1. create a "requirements.txt" file and include all the below text for dependencies:
+
+	Django>=3.2,<4.0
+
+	osmnx>=1.1
+
+	networkx>=2.5
+
+	folium>=0.12.1
+
+	geopy>=2.2.0
+
+
+2. After that run the command "pip install -r requirements.txt" on the terminal of the current project directory.
+
 
 ## Step 2: Connect project with database.
 
